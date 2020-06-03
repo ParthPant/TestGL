@@ -8,10 +8,11 @@
 #include "glm/glm.hpp"
 
 ShaderSource Shader::ParseShader(const std::string& file) {
-    std::ifstream stream(file);
+    std::ifstream stream(file.c_str());
 
     if (!stream) {
         std::cout << "Error opening " << file << std::endl;
+        __debugbreak();
     }
 
     enum class ShaderType {

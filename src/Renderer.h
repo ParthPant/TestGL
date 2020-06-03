@@ -17,6 +17,7 @@ bool GLLogCall(const char* function, const char* file, int line);
 
 class Renderer {
 public:
+    void ClearColor(float f1, float f2, float f3, float f4) const;
     void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
     void Clear() const;
 };

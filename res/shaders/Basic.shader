@@ -7,11 +7,9 @@ layout (location = 1) in vec2 texCord;
 out vec4 vertexColor;
 out vec2 v_texCord;
 
-uniform mat4 u_MVP;
-
 void main()
 {
-   gl_Position = u_MVP * position;
+   gl_Position = position;
    v_texCord = texCord;
 };
 
@@ -22,10 +20,9 @@ out vec4 color;
 in vec2 v_texCord;
 
 uniform sampler2D u_Texture;
-uniform vec4 u_Color;
 
 void main()
 {
    vec4 TexColor = texture(u_Texture, v_texCord);
-   color = TexColor * u_Color;
+   color = TexColor;
 };

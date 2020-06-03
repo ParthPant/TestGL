@@ -18,6 +18,11 @@ bool GLLogCall(const char* function, const char* file, int line) {
     return true;
 }
 
+void Renderer::ClearColor(float f1, float f2, float f3, float f4) const
+{
+    GLCall(glClearColor(f1,f2,f3,f4));
+}
+
 void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
 {
     shader.Bind();
