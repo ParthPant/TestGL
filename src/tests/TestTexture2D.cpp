@@ -4,18 +4,17 @@
 #include "Renderer.h"
 
 #include "imgui/imgui.h"
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+
 
 namespace test {
 
 	TestTexture2D::TestTexture2D()
 	{
 		float verticies[] = {
-			-0.5f, -0.5f, 0.0f,   0.0f, 0.0f,
-			 0.5f, -0.5f, 0.0f,   1.0f, 0.0f,
-			 0.5f,  0.5f, 0.0f,	  1.0f, 1.0f,
-			-0.5f,  0.5f, 0.0f,   0.0f, 1.0f
+			-100.0f, -100.0f, 0.0f,   0.0f, 0.0f,
+			 100.0f, -100.0f, 0.0f,   1.0f, 0.0f,
+			 100.0f,  100.0f, 0.0f,	  1.0f, 1.0f,
+			-100.0f,  100.0f, 0.0f,   0.0f, 1.0f
 		};
 
 		unsigned int indices[] = {
@@ -41,6 +40,10 @@ namespace test {
 		m_shader->setUniform1i("u_Texture", 0);
 		m_shader->Unbind();
 		m_texture->Unbind();
+
+		m_proj = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, -1.0f, 1.0f);
+		m_view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+		m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
 	}
 	TestTexture2D::~TestTexture2D()
 	{
@@ -57,12 +60,21 @@ namespace test {
 		m_texture->Bind();
 		m_va->Bind();
 
+		glm::mat4 mvp = m_proj * m_view * m_model;
+
+		m_view = glm::translate(glm::mat4(1.0f), *viewTrans);
+		m_model = glm::translate(glm::mat4(1.0f), *modelTrans);
+		//m_proj = glm::translate(glm::mat4(1.0f), *projTrans);
+
+		m_shader->setUniformMat4f("u_MVP", mvp);
 		Renderer renderer;
 		renderer.Draw(*m_va, *m_ib, *m_shader);
 	}
 	void TestTexture2D::OnImGuiRender() 
 	{
-		
+		ImGui::SliderFloat3("Model", &modelTrans->x, 0.0f, 800.0f);
+		ImGui::SliderFloat3("View", &viewTrans->x, 0.0f, 800.0f);
+		//ImGui::SliderFloat3("Projection", &projTrans->x, 0.0f, 800.0f);
 	}
 
 }

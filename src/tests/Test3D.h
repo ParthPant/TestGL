@@ -15,11 +15,11 @@
 
 namespace test {
 
-	class TestTexture2D : public Test
+	class Test3D : public Test
 	{
 	private:
 		std::unique_ptr<VertexBuffer> m_vb;
-		std::unique_ptr<IndexBuffer> m_ib;
+		//std::unique_ptr<IndexBuffer> m_ib;
 		std::unique_ptr<VertexBufferLayout> m_layout;
 		std::unique_ptr<VertexArray> m_va;
 		std::unique_ptr<Shader> m_shader;
@@ -29,13 +29,20 @@ namespace test {
 		glm::mat4 m_view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
 		glm::mat4 m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
 
-		std::unique_ptr<glm::vec3> modelTrans = std::make_unique<glm::vec3>(0, 0, 0);
-		std::unique_ptr<glm::vec3> viewTrans =  std::make_unique<glm::vec3>(0, 0, 0);
-		std::unique_ptr<glm::vec3> projTrans =  std::make_unique<glm::vec3>(0, 0, 0);
+		std::unique_ptr<glm::vec3> scaleVec;
+		std::unique_ptr<glm::vec3> rotateVec;
+
+		float m_rotation = 0.0f;
+
+		enum class projection{
+			ORTHO = 1, PERSP = 0
+		};
+
+		projection m_projection = projection::PERSP;
 
 	public:
-		TestTexture2D();
-		~TestTexture2D();
+		Test3D();
+		~Test3D();
 
 		void OnUpdate(float deltaTime) override;
 		void OnRender() override;

@@ -18,6 +18,10 @@ bool GLLogCall(const char* function, const char* file, int line) {
     return true;
 }
 
+Renderer::Renderer()
+{
+}
+
 void Renderer::ClearColor(float f1, float f2, float f3, float f4) const
 {
     GLCall(glClearColor(f1,f2,f3,f4));
@@ -31,6 +35,18 @@ void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
     GLCall(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
 }
 
+void Renderer::Draw(const VertexArray& va, int vertex_count, const Shader& shader) const
+{
+    shader.Bind();
+    va.Bind();
+    GLCall(glDrawArrays(GL_TRIANGLES, 0, vertex_count));
+}
+
 void Renderer::Clear() const {
-    GLCall(glClear(GL_COLOR_BUFFER_BIT));
+    GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+}
+
+void Renderer::EnableDepth() const
+{
+    GLCall(glEnable(GL_DEPTH_TEST));
 }

@@ -11,9 +11,11 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
-#include "tests/TestClearColor.h"
 #include "tests/Test.h"
+#include "tests/TestClearColor.h"
 #include "tests/TestTexture2D.h"
+#include "tests/TestTransforms.h"
+#include "tests/Test3D.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -61,6 +63,8 @@ int main() {
 
         Menu->RegisterTest<test::TestClearColor>("ClearColor");
         Menu->RegisterTest<test::TestTexture2D>("Texture2D");
+        Menu->RegisterTest<test::TestTransforms>("Rotation");
+        Menu->RegisterTest<test::Test3D>("3D");
 
         ImGui::CreateContext();
         ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -86,6 +90,8 @@ int main() {
 
                 currentTest->OnUpdate(0.0f);
                 currentTest->OnImGuiRender();
+
+                ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
                 ImGui::End();
             }
 
