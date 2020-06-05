@@ -38,6 +38,8 @@ namespace test {
 		GLFWwindow* m_window;
 
 		float m_rotation = 0.0f;
+		float m_lastX;
+		float m_lastY;
 
 		enum class projection{
 			ORTHO = 1, PERSP = 0

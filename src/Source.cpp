@@ -80,7 +80,9 @@ int main() {
            deltaTime = currentFrame - lastFrame;
            lastFrame = currentFrame;
 
-            processInput(window);
+           if (currentTest == Menu) {
+               processInput(window);
+           }
 
             renderer.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             renderer.Clear();
@@ -92,15 +94,15 @@ int main() {
             {
                 ImGui::Begin("Test");                          
 
-                if (currentTest != Menu && ImGui::Button("<=")) {
+                if (currentTest != Menu && ImGui::Button("<=(BKSP)")) {
                     delete currentTest;
                     currentTest = Menu;
                 }
 
-                /*if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+                if (currentTest != Menu && glfwGetKey(window, GLFW_KEY_BACKSPACE) == GLFW_PRESS) {
                     delete currentTest;
                     currentTest = Menu;
-                }*/
+                }
 
                 currentTest->OnUpdate(deltaTime, window);
                 currentTest->OnImGuiRender();

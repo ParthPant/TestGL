@@ -82,10 +82,14 @@ namespace test {
 		m_shader->Unbind();
 		m_texture->Unbind();
 
+		m_lastX = 400;
+		m_lastY = 300;
+
+
 	}
 	TestCamera::~TestCamera()
 	{
-		/*glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);*/
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 
 	void TestCamera::OnUpdate(float deltaTime, GLFWwindow *window)
@@ -101,17 +105,15 @@ namespace test {
 
 		m_window = window;
 
-		//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 
-		float lastX = 400, lastY = 300;
-
-		float xoffset = xpos - lastX;
-		float yoffset = lastY - ypos; // reversed since y-coordinates range from bottom to top
-		lastX = xpos;
-		lastY = ypos;
+		float xoffset = xpos - m_lastX;
+		float yoffset = m_lastY - ypos; // reversed since y-coordinates range from bottom to top
+		m_lastX = xpos;
+		m_lastY = ypos;
 
 		m_Camera->ProcessMouseInput(xoffset, yoffset, true);
 	}

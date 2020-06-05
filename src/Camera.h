@@ -33,7 +33,7 @@ public:
 	 	NONE = 0, UP, DOWN, RIGHT, LEFT, FORWARD, BACKWARD
 	 };
 
-	 Camera(float movespeed, glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), const glm::vec3& front = glm::vec3(0.0f, 0.0f, 1.0f), const glm::vec3& worldup = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = 0.0f, float pitch = 0.0f, float mouseSensitivity = 0.01f, float scrollSensitivity = 1.0f);
+	 Camera(float movespeed, glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), const glm::vec3& front = glm::vec3(0.0f, 0.0f, 1.0f), const glm::vec3& worldup = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = 0.0f, float pitch = 0.0f, float mouseSensitivity = 0.1f, float scrollSensitivity = 1.0f);
 	 ~Camera();
 
 	 void ProcessKeyboardInput(direction direction, float deltatime);
