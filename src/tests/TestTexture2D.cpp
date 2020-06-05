@@ -50,7 +50,7 @@ namespace test {
 
 	}
 
-	void TestTexture2D::OnUpdate(float deltaTime)
+	void TestTexture2D::OnUpdate(float deltaTime, GLFWwindow *window)
 	{
 
 	}

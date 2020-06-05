@@ -4,6 +4,8 @@
 #include "Renderer.h"
 #include "imgui/imgui.h"
 
+
+
 namespace test {
 
 	TestClearColor::TestClearColor(): m_ClearColor {0.0f,1.0f,1.0f,1.0f}
@@ -15,7 +17,7 @@ namespace test {
 
 	}
 
-	void TestClearColor::OnUpdate(float deltaTime)
+	void TestClearColor::OnUpdate(float deltaTime, GLFWwindow *window)
 	{
 
 	}

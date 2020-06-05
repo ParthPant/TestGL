@@ -1,16 +1,13 @@
 #include <glad/glad.h>
 
-#include "Test3D.h"
+#include "TestCamera.h"
 #include "Renderer.h"
 
 #include "imgui/imgui.h"
-#include "GLFW/glfw3.h"
-
-
 
 namespace test {
 
-	Test3D::Test3D()
+	TestCamera::TestCamera()
 	{
 		float verticies[] = {
 			-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -61,6 +58,8 @@ namespace test {
 			2, 3, 0
 		};*/
 
+		m_Camera = std::make_unique<Camera>(0.01f);
+
 		rotateVec = std::make_unique<glm::vec3>(0.0f, 0.0f, 0.0f);
 		scaleVec = std::make_unique<glm::vec3>(1.0f, 1.0f, 1.0f);
 
@@ -84,52 +83,87 @@ namespace test {
 		m_texture->Unbind();
 
 	}
-	Test3D::~Test3D()
+	TestCamera::~TestCamera()
 	{
-
+		/*glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);*/
 	}
 
-	void Test3D::OnUpdate(float deltaTime, GLFWwindow *window)
+	void TestCamera::OnUpdate(float deltaTime, GLFWwindow *window)
 	{
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			m_Camera->ProcessKeyboardInput(Camera::direction::FORWARD, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			m_Camera->ProcessKeyboardInput(Camera::direction::BACKWARD, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			m_Camera->ProcessKeyboardInput(Camera::direction::LEFT, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			m_Camera->ProcessKeyboardInput(Camera::direction::RIGHT, deltaTime);
 
+		m_window = window;
+
+		//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+		double xpos, ypos;
+		glfwGetCursorPos(window, &xpos, &ypos);
+
+		float lastX = 400, lastY = 300;
+
+		float xoffset = xpos - lastX;
+		float yoffset = lastY - ypos; // reversed since y-coordinates range from bottom to top
+		lastX = xpos;
+		lastY = ypos;
+
+		m_Camera->ProcessMouseInput(xoffset, yoffset, true);
 	}
-	void Test3D::OnRender() 
+
+	void TestCamera::OnRender() 
 	{
 		m_shader->Bind();
 		m_texture->Bind();
 		m_va->Bind();
 
-		glm::mat4 model = glm::mat4(1.0f); // basically the model matrix
-		model = glm::rotate(model, glm::radians(rotateVec->x), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(rotateVec->y), glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, glm::radians(rotateVec->z), glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::scale (model, *scaleVec);
+		
 
-		glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+		glm::mat4 model = glm::mat4(1.0f); // basically the model matrix
+		glm::mat4 view = m_Camera->GetLookAt();
 
 		glm::mat4 proj;
-		if(m_projection == projection::PERSP)
+		if (m_projection == projection::PERSP)
 			proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 100.0f);
 		else
 			proj = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 100.0f);
 
-		glm::mat4 mvp = proj * view * model;
+		glm::vec3 cubePositions[] = {
+			glm::vec3(0.0f,  0.0f,  0.0f),
+			glm::vec3(2.0f,  5.0f, -15.0f),
+			glm::vec3(-1.5f, -2.2f, -2.5f),
+			glm::vec3(-3.8f, -2.0f, -12.3f),
+			glm::vec3(2.4f, -0.4f, -3.5f),
+			glm::vec3(-1.7f,  3.0f, -7.5f),
+			glm::vec3(1.3f, -2.0f, -2.5f),
+			glm::vec3(1.5f,  2.0f, -2.5f),
+			glm::vec3(1.5f,  0.2f, -1.5f),
+			glm::vec3(-1.3f,  1.0f, -1.5f)
+		};
 
-		m_shader->setUniformMat4f("u_MVP", mvp);
-		
-		Renderer renderer;
-		renderer.EnableDepth();
-		renderer.Draw(*m_va, 36, *m_shader);
+		for (int i = 0; i < 10; i++) {
+			model = glm::rotate(model, glm::radians((float)9*i), glm::vec3(1.0f, 0.0f, 0.0f));
+			model = glm::rotate(model, glm::radians((float)9*i), glm::vec3(0.0f, 1.0f, 0.0f));
+			model = glm::rotate(model, glm::radians((float)9*i), glm::vec3(0.0f, 0.0f, 1.0f));
+			
+			model = glm::translate(model, cubePositions[i]);
+
+			glm::mat4 mvp = proj * view * model;
+
+			m_shader->setUniformMat4f("u_MVP", mvp);
+
+			Renderer renderer;
+			renderer.EnableDepth();
+			renderer.Draw(*m_va, 36, *m_shader);
+		}
 	}
-	void Test3D::OnImGuiRender() 
+	void TestCamera::OnImGuiRender() 
 	{
-		ImGui::SliderFloat3("Rotate", &rotateVec->x, 0.0f, 360.0f);
-		ImGui::SliderFloat3("Scale", &scaleVec->x, 0.0f, 10.0f);
-
-		if(ImGui::RadioButton("Ortho", (int)m_projection == 1)) 
-			m_projection = projection::ORTHO;
-		else if(ImGui::RadioButton("Persp", (int)m_projection == 0)) 
-			m_projection = projection::PERSP;
 	}
 
 }

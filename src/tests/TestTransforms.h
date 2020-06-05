@@ -10,6 +10,8 @@
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "GLFW/glfw3.h"
+
 
 #include <memory>
 
@@ -38,7 +40,7 @@ namespace test {
 		TestTransforms();
 		~TestTransforms();
 
-		void OnUpdate(float deltaTime) override;
+		void OnUpdate(float deltaTime, GLFWwindow *window) override;
 		void OnRender() override;
 		void OnImGuiRender() override;
 	};

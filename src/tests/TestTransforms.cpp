@@ -50,7 +50,7 @@ namespace test {
 
 	}
 
-	void TestTransforms::OnUpdate(float deltaTime)
+	void TestTransforms::OnUpdate(float deltaTime, GLFWwindow *window)
 	{
 
 	}

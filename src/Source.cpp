@@ -16,6 +16,7 @@
 #include "tests/TestTexture2D.h"
 #include "tests/TestTransforms.h"
 #include "tests/Test3D.h"
+#include "tests/TestCamera.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -65,12 +66,20 @@ int main() {
         Menu->RegisterTest<test::TestTexture2D>("Texture2D");
         Menu->RegisterTest<test::TestTransforms>("Rotation");
         Menu->RegisterTest<test::Test3D>("3D");
+        Menu->RegisterTest<test::TestCamera>("Camera");
 
         ImGui::CreateContext();
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui::StyleColorsDark();
 
        while (!glfwWindowShouldClose(window)) {
+           float deltaTime = 0.0f;	// Time between current frame and last frame
+           float lastFrame = 0.0f; // Time of last frame
+
+           float currentFrame = glfwGetTime();
+           deltaTime = currentFrame - lastFrame;
+           lastFrame = currentFrame;
+
             processInput(window);
 
             renderer.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -88,7 +97,12 @@ int main() {
                     currentTest = Menu;
                 }
 
-                currentTest->OnUpdate(0.0f);
+                /*if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+                    delete currentTest;
+                    currentTest = Menu;
+                }*/
+
+                currentTest->OnUpdate(deltaTime, window);
                 currentTest->OnImGuiRender();
 
                 ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
