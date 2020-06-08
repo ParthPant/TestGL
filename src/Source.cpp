@@ -17,6 +17,7 @@
 #include "tests/TestTransforms.h"
 #include "tests/Test3D.h"
 #include "tests/TestCamera.h"
+#include "tests/TestLighting.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -67,6 +68,7 @@ int main() {
         Menu->RegisterTest<test::TestTransforms>("Rotation");
         Menu->RegisterTest<test::Test3D>("3D");
         Menu->RegisterTest<test::TestCamera>("Camera");
+        Menu->RegisterTest<test::TestLighting>("Lighting");
 
         ImGui::CreateContext();
         ImGui_ImplGlfw_InitForOpenGL(window, true);

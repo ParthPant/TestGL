@@ -836,6 +836,8 @@
     <None Include="res\shaders\Basic.shader">
       <Filter>res\shaders</Filter>
     </None>
+    <None Include="res\shaders\LightTestObject.shader" />
+    <None Include="res\shaders\LightTestSource.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Source.cpp">
@@ -905,6 +907,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\TestLighting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2668,6 +2673,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\TestLighting.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

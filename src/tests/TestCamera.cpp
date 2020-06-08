@@ -76,7 +76,7 @@ namespace test {
 
 		m_shader = std::make_unique<Shader>("res/shaders/Basic.shader");
 		m_shader->Bind();
-		m_texture = std::make_unique<Texture>("res/textures/wood.png");
+		m_texture = std::make_unique<Texture>("res/textures/grass.png");
 		m_texture->Bind();
 		m_shader->setUniform1i("u_Texture", 0);
 		m_shader->Unbind();

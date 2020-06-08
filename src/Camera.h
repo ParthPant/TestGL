@@ -39,6 +39,8 @@ public:
 	 void ProcessKeyboardInput(direction direction, float deltatime);
 	 void ProcessMouseInput(float xoffset, float yoffset, bool constrain_pitch);
 
+	 glm::vec3 GetPosition() const { return m_Pos; };
+
 	 glm::mat4 GetLookAt();
 
 private:
